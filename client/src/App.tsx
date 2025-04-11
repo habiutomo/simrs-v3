@@ -13,6 +13,7 @@ import AppointmentForm from "./pages/appointments/AppointmentForm";
 import MedicalRecordList from "./pages/medical-records/MedicalRecordList";
 import MedicalRecordForm from "./pages/medical-records/MedicalRecordForm";
 import OutpatientQueue from "./pages/outpatient/OutpatientQueue";
+import InpatientManagement from "./pages/inpatient/InpatientManagement";
 import PharmacyInventory from "./pages/pharmacy/PharmacyInventory";
 import PrescriptionList from "./pages/pharmacy/PrescriptionList";
 import LabRequestList from "./pages/laboratory/LabRequestList";

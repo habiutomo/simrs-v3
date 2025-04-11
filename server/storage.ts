@@ -687,6 +687,23 @@ export class MemStorage implements IStorage {
       }
     });
 
+    // Create sample inpatient admissions
+    const bedForAdmission = this.createBed({
+      roomId: roomIds.general1,
+      bedNumber: `R101-Extra`,
+      status: "occupied"
+    });
+
+    this.createInpatientAdmission({
+      patientId: patientIds.patient2,
+      doctorId: doctorIds.general,
+      bedId: bedForAdmission.id,
+      admissionDate: "2025-04-10",
+      admissionTime: "09:15:00",
+      diagnosis: "Pneumonia",
+      status: "active"
+    });
+
     // Create today's date
     const today = new Date();
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -1234,9 +1251,19 @@ export class MemStorage implements IStorage {
     );
   }
 
+  async getAllBeds(): Promise<Bed[]> {
+    return Array.from(this.beds.values());
+  }
+
   async getAvailableBeds(): Promise<Bed[]> {
     return Array.from(this.beds.values()).filter(
       (bed) => bed.status === "available"
+    );
+  }
+  
+  async getOccupiedBeds(): Promise<Bed[]> {
+    return Array.from(this.beds.values()).filter(
+      (bed) => bed.status === "occupied"
     );
   }
 
