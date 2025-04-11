@@ -124,7 +124,9 @@ export interface IStorage {
   createBed(bed: InsertBed): Promise<Bed>;
   updateBed(id: number, bed: Partial<InsertBed>): Promise<Bed>;
   getRoomBeds(roomId: number): Promise<Bed[]>;
+  getAllBeds(): Promise<Bed[]>;
   getAvailableBeds(): Promise<Bed[]>;
+  getOccupiedBeds(): Promise<Bed[]>;
 
   // Inpatient Admission operations
   getInpatientAdmission(id: number): Promise<InpatientAdmission | undefined>;

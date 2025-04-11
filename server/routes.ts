@@ -556,6 +556,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(beds);
   });
 
+  app.get("/api/beds", async (req, res) => {
+    const { status } = req.query;
+    
+    if (status && typeof status === "string") {
+      if (status === 'available') {
+        const beds = await storage.getAvailableBeds();
+        return res.json(beds);
+      } else if (status === 'occupied') {
+        const beds = await storage.getOccupiedBeds();
+        return res.json(beds);
+      }
+    }
+    
+    const beds = await storage.getAllBeds();
+    res.json(beds);
+  });
+  
   app.get("/api/beds/available", async (req, res) => {
     const beds = await storage.getAvailableBeds();
     res.json(beds);
