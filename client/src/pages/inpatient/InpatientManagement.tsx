@@ -74,47 +74,32 @@ export default function InpatientManagement() {
   // Load active admissions
   const { data: activeAdmissions, isLoading: loadingActive } = useQuery({
     queryKey: ['/api/inpatient/admissions', 'active'],
-    queryFn: async () => {
-      const response = await apiRequest('/api/inpatient/admissions?active=true');
-      return response as any[];
-    },
+    queryFn: async () => await apiRequest('/api/inpatient/admissions?active=true'),
     enabled: selectedTab === "active"
   });
 
   // Load available beds
   const { data: availableBeds, isLoading: loadingBeds } = useQuery({
     queryKey: ['/api/beds/available'],
-    queryFn: async () => {
-      const response = await apiRequest('/api/beds?status=available');
-      return response as any[];
-    }
+    queryFn: async () => await apiRequest('/api/beds?status=available')
   });
 
   // Load rooms
   const { data: rooms, isLoading: loadingRooms } = useQuery({
     queryKey: ['/api/rooms'],
-    queryFn: async () => {
-      const response = await apiRequest('/api/rooms');
-      return response as any[];
-    }
+    queryFn: async () => await apiRequest('/api/rooms')
   });
 
   // Load all patients for admission form
   const { data: patients, isLoading: loadingPatients } = useQuery({
     queryKey: ['/api/patients'],
-    queryFn: async () => {
-      const response = await apiRequest('/api/patients');
-      return response as any[];
-    }
+    queryFn: async () => await apiRequest('/api/patients')
   });
 
   // Load doctors
   const { data: doctors, isLoading: loadingDoctors } = useQuery({
     queryKey: ['/api/doctors'],
-    queryFn: async () => {
-      const response = await apiRequest('/api/doctors');
-      return response as any[];
-    }
+    queryFn: async () => await apiRequest('/api/doctors')
   });
 
   // Create admission mutation
