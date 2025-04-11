@@ -91,13 +91,13 @@ export default function PharmacyInventory() {
               <span className="text-sm text-gray-500">Kategori:</span>
               <Select
                 value={category}
-                onValueChange={(value) => setCategory(value || undefined)}
+                onValueChange={(value) => setCategory(value === "all" ? undefined : value)}
               >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Semua Kategori" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Semua Kategori</SelectItem>
+                  <SelectItem value="all">Semua Kategori</SelectItem>
                   <SelectItem value="Analgesic">Analgesik</SelectItem>
                   <SelectItem value="Antibiotic">Antibiotik</SelectItem>
                   <SelectItem value="Antacid">Antasida</SelectItem>
