@@ -19,6 +19,8 @@ import LabRequestList from "./pages/laboratory/LabRequestList";
 import LabResultForm from "./pages/laboratory/LabResultForm";
 import Reports from "./pages/reports/Reports";
 import BillingList from "./pages/billing/BillingList";
+import Radiology from "./pages/radiology/Radiology";
+import Integration from "./pages/integration/Integration";
 
 function Router() {
   return (
@@ -38,8 +40,10 @@ function Router() {
       <Route path="/laboratory/results/new/:requestId">{(params) => (
         <LabResultForm requestId={parseInt(params.requestId)} />
       )}</Route>
+      <Route path="/radiology" component={Radiology} />
       <Route path="/reports" component={Reports} />
       <Route path="/billing" component={BillingList} />
+      <Route path="/integration" component={Integration} />
       <Route component={NotFound} />
     </Switch>
   );

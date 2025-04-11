@@ -44,18 +44,18 @@ export default function Sidebar() {
               (item.href !== "/" && location.startsWith(item.href));
             
             return (
-              <Link key={item.name} href={item.href}>
-                <a
-                  className={cn(
-                    "flex items-center px-2 py-2 text-sm font-medium rounded-md",
-                    isActive
-                      ? "bg-primary text-white"
-                      : "text-gray-700 hover:bg-gray-100"
-                  )}
-                >
-                  <item.icon className="h-5 w-5 mr-3" />
-                  {item.name}
-                </a>
+              <Link 
+                key={item.name} 
+                href={item.href}
+                className={cn(
+                  "flex items-center px-2 py-2 text-sm font-medium rounded-md",
+                  isActive
+                    ? "bg-primary text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                )}
+              >
+                <item.icon className="h-5 w-5 mr-3" />
+                {item.name}
               </Link>
             );
           })}
