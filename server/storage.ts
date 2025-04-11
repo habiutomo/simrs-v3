@@ -198,6 +198,8 @@ export class MemStorage implements IStorage {
   private inpatientAdmissions: Map<number, InpatientAdmission>;
   private billings: Map<number, Billing>;
   private billingItems: Map<number, BillingItem>;
+  private insuranceProviders: Map<number, InsuranceProvider>;
+  private patientInsurances: Map<number, PatientInsurance>;
 
   // Auto-incrementing IDs
   private userId: number;
@@ -219,6 +221,8 @@ export class MemStorage implements IStorage {
   private admissionId: number;
   private billingId: number;
   private billingItemId: number;
+  private insuranceProviderId: number;
+  private patientInsuranceId: number;
 
   constructor() {
     this.users = new Map();
@@ -240,6 +244,8 @@ export class MemStorage implements IStorage {
     this.inpatientAdmissions = new Map();
     this.billings = new Map();
     this.billingItems = new Map();
+    this.insuranceProviders = new Map();
+    this.patientInsurances = new Map();
 
     this.userId = 1;
     this.patientId = 1;
@@ -260,6 +266,8 @@ export class MemStorage implements IStorage {
     this.admissionId = 1;
     this.billingId = 1;
     this.billingItemId = 1;
+    this.insuranceProviderId = 1;
+    this.patientInsuranceId = 1;
 
     // Initialize with some sample data
     this.initializeSampleData();
@@ -275,6 +283,70 @@ export class MemStorage implements IStorage {
       email: "admin@hospital.com",
       phone: "123-456-7890"
     });
+    
+    // Create sample insurance providers
+    const insuranceProviderIds = {
+      bpjs: this.createInsuranceProvider({
+        name: "BPJS Kesehatan",
+        code: "BPJS",
+        type: "government",
+        contact: "Pusat Layanan Informasi BPJS",
+        email: "info@bpjs-kesehatan.go.id",
+        phone: "1500400",
+        address: "Jl. Gatot Subroto No.80, Jakarta",
+        apiEndpoint: "https://api.bpjs-kesehatan.go.id/v2",
+        status: "active",
+        lastSyncDate: new Date()
+      }).id,
+      prudential: this.createInsuranceProvider({
+        name: "Prudential Indonesia",
+        code: "PRUD",
+        type: "private",
+        contact: "Customer Service Prudential",
+        email: "customer.service@prudential.co.id",
+        phone: "1500085",
+        address: "Prudential Tower, Jl. Jend. Sudirman Kav. 79, Jakarta",
+        apiEndpoint: "https://api.prudential.co.id/partner",
+        status: "active",
+        lastSyncDate: new Date()
+      }).id,
+      allianz: this.createInsuranceProvider({
+        name: "Allianz Indonesia",
+        code: "ALIZ",
+        type: "private",
+        contact: "Allianz Care",
+        email: "contact.center@allianz.co.id",
+        phone: "1500136",
+        address: "Allianz Tower, Jl. HR Rasuna Said, Jakarta",
+        apiEndpoint: "https://api.allianz.co.id/v1",
+        status: "inactive",
+        lastSyncDate: null
+      }).id,
+      mandiri: this.createInsuranceProvider({
+        name: "AXA Mandiri",
+        code: "AXAM",
+        type: "private",
+        contact: "AXA Mandiri Contact Center",
+        email: "customer.service@axa-mandiri.co.id",
+        phone: "1500803",
+        address: "AXA Tower, Jl. Prof. Dr. Satrio Kav. 18, Jakarta",
+        apiEndpoint: "https://api.axa-mandiri.co.id/services",
+        status: "active",
+        lastSyncDate: new Date()
+      }).id,
+      inhealth: this.createInsuranceProvider({
+        name: "Mandiri Inhealth",
+        code: "MINH",
+        type: "private",
+        contact: "Mandiri Inhealth Contact Center",
+        email: "customer.service@mandiriinhealth.co.id",
+        phone: "1500822",
+        address: "Menara Palma, Jl. HR Rasuna Said Blok X2 Kav. 6, Jakarta",
+        apiEndpoint: "https://api.mandiriinhealth.co.id/rest",
+        status: "pending",
+        lastSyncDate: null
+      }).id
+    };
 
     // Create sample departments
     const departmentIds = {
@@ -450,6 +522,55 @@ export class MemStorage implements IStorage {
         allergies: "Shellfish"
       }).id
     };
+    
+    // Create sample patient insurances
+    this.createPatientInsurance({
+      patientId: patientIds.patient1,
+      insuranceProviderId: insuranceProviderIds.bpjs,
+      memberNumber: "BPJS123456789",
+      cardNumber: "0001234567890",
+      policyNumber: null,
+      startDate: new Date("2019-01-01"),
+      endDate: new Date("2030-12-31"),
+      coverageType: "Full",
+      coverageLimit: null,
+      status: "active",
+      verificationStatus: "verified",
+      verificationDate: new Date(),
+      notes: "Covered by national health insurance"
+    });
+    
+    this.createPatientInsurance({
+      patientId: patientIds.patient3,
+      insuranceProviderId: insuranceProviderIds.prudential,
+      memberNumber: "INS987654321",
+      cardNumber: "PRUD98765432",
+      policyNumber: "POL-123456",
+      startDate: new Date("2020-05-15"),
+      endDate: new Date("2025-05-14"),
+      coverageType: "Premium",
+      coverageLimit: "500000000",
+      status: "active",
+      verificationStatus: "verified",
+      verificationDate: new Date(),
+      notes: "Premium health insurance with international coverage"
+    });
+    
+    this.createPatientInsurance({
+      patientId: patientIds.patient4,
+      insuranceProviderId: insuranceProviderIds.bpjs,
+      memberNumber: "BPJS987654321",
+      cardNumber: "0009876543210",
+      policyNumber: null,
+      startDate: new Date("2018-03-10"),
+      endDate: new Date("2030-12-31"),
+      coverageType: "Full",
+      coverageLimit: null,
+      status: "active",
+      verificationStatus: "verified",
+      verificationDate: new Date(),
+      notes: "Covered by national health insurance"
+    });
 
     // Create sample medications
     const medicationIds = {
@@ -1436,6 +1557,88 @@ export class MemStorage implements IStorage {
         occupied: emergencyOccupied,
       },
     };
+  }
+  
+  // Insurance Provider operations
+  async getInsuranceProvider(id: number): Promise<InsuranceProvider | undefined> {
+    return this.insuranceProviders.get(id);
+  }
+
+  async getInsuranceProviderByCode(code: string): Promise<InsuranceProvider | undefined> {
+    return Array.from(this.insuranceProviders.values()).find(
+      (provider) => provider.code === code
+    );
+  }
+
+  async createInsuranceProvider(provider: InsertInsuranceProvider): Promise<InsuranceProvider> {
+    const id = this.insuranceProviderId++;
+    const newProvider: InsuranceProvider = { 
+      ...provider, 
+      id, 
+      createdAt: new Date() 
+    };
+    this.insuranceProviders.set(id, newProvider);
+    return newProvider;
+  }
+
+  async updateInsuranceProvider(id: number, data: Partial<InsertInsuranceProvider>): Promise<InsuranceProvider> {
+    const provider = await this.getInsuranceProvider(id);
+    if (!provider) {
+      throw new Error(`Insurance Provider with ID ${id} not found`);
+    }
+    
+    const updatedProvider: InsuranceProvider = { ...provider, ...data };
+    this.insuranceProviders.set(id, updatedProvider);
+    return updatedProvider;
+  }
+
+  async getInsuranceProviders(): Promise<InsuranceProvider[]> {
+    return Array.from(this.insuranceProviders.values());
+  }
+
+  async getActiveInsuranceProviders(): Promise<InsuranceProvider[]> {
+    return Array.from(this.insuranceProviders.values()).filter(
+      (provider) => provider.status === 'active'
+    );
+  }
+
+  // Patient Insurance operations
+  async getPatientInsurance(id: number): Promise<PatientInsurance | undefined> {
+    return this.patientInsurances.get(id);
+  }
+
+  async createPatientInsurance(insurance: InsertPatientInsurance): Promise<PatientInsurance> {
+    const id = this.patientInsuranceId++;
+    const newInsurance: PatientInsurance = { 
+      ...insurance, 
+      id, 
+      createdAt: new Date() 
+    };
+    this.patientInsurances.set(id, newInsurance);
+    return newInsurance;
+  }
+
+  async updatePatientInsurance(id: number, data: Partial<InsertPatientInsurance>): Promise<PatientInsurance> {
+    const insurance = await this.getPatientInsurance(id);
+    if (!insurance) {
+      throw new Error(`Patient Insurance with ID ${id} not found`);
+    }
+    
+    const updatedInsurance: PatientInsurance = { ...insurance, ...data };
+    this.patientInsurances.set(id, updatedInsurance);
+    return updatedInsurance;
+  }
+
+  async getPatientInsurances(patientId: number): Promise<PatientInsurance[]> {
+    return Array.from(this.patientInsurances.values()).filter(
+      (insurance) => insurance.patientId === patientId
+    );
+  }
+
+  async getActivePatientInsurances(patientId: number): Promise<PatientInsurance[]> {
+    return Array.from(this.patientInsurances.values()).filter(
+      (insurance) => insurance.patientId === patientId && insurance.status === 'active'
+    );
   }
 }
 
