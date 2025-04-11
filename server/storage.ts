@@ -17,7 +17,9 @@ import {
   beds, Bed, InsertBed,
   inpatientAdmissions, InpatientAdmission, InsertInpatientAdmission,
   billings, Billing, InsertBilling,
-  billingItems, BillingItem, InsertBillingItem
+  billingItems, BillingItem, InsertBillingItem,
+  insuranceProviders, InsuranceProvider, InsertInsuranceProvider,
+  patientInsurances, PatientInsurance, InsertPatientInsurance
 } from "@shared/schema";
 
 // Interface for storage operations
@@ -142,6 +144,21 @@ export interface IStorage {
   getBillingItem(id: number): Promise<BillingItem | undefined>;
   createBillingItem(item: InsertBillingItem): Promise<BillingItem>;
   getBillingItems(billingId: number): Promise<BillingItem[]>;
+
+  // Insurance Provider operations
+  getInsuranceProvider(id: number): Promise<InsuranceProvider | undefined>;
+  getInsuranceProviderByCode(code: string): Promise<InsuranceProvider | undefined>;
+  createInsuranceProvider(provider: InsertInsuranceProvider): Promise<InsuranceProvider>;
+  updateInsuranceProvider(id: number, provider: Partial<InsertInsuranceProvider>): Promise<InsuranceProvider>;
+  getInsuranceProviders(): Promise<InsuranceProvider[]>;
+  getActiveInsuranceProviders(): Promise<InsuranceProvider[]>;
+
+  // Patient Insurance operations
+  getPatientInsurance(id: number): Promise<PatientInsurance | undefined>;
+  createPatientInsurance(insurance: InsertPatientInsurance): Promise<PatientInsurance>;
+  updatePatientInsurance(id: number, insurance: Partial<InsertPatientInsurance>): Promise<PatientInsurance>;
+  getPatientInsurances(patientId: number): Promise<PatientInsurance[]>;
+  getActivePatientInsurances(patientId: number): Promise<PatientInsurance[]>;
 
   // Dashboard data
   getDashboardStats(): Promise<{

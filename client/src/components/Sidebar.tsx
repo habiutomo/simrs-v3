@@ -29,7 +29,7 @@ export default function Sidebar() {
     { name: "Radiologi", href: "/radiology", icon: Zap },
     { name: "Billing", href: "/billing", icon: CreditCard },
     { name: "Laporan & Analitik", href: "/reports", icon: BarChart2 },
-    { name: "Integrasi Satu Sehat", href: "/integration", icon: Server },
+    { name: "Integrasi Sistem", href: "/integration", icon: Server },
   ];
 
   return (

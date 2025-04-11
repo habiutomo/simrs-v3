@@ -322,6 +322,45 @@ export const insertBillingItemSchema = createInsertSchema(billingItems).omit({
   id: true,
 });
 
+// Insurance Provider schema
+export const insuranceProviders = pgTable("insurance_providers", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  code: text("code").notNull().unique(),
+  type: text("type").notNull(), // 'government', 'private'
+  contact: text("contact"),
+  email: text("email"),
+  phone: text("phone"),
+  address: text("address"),
+  apiEndpoint: text("api_endpoint"),
+  status: text("status").notNull().default("active"), // 'active', 'inactive', 'pending'
+  lastSyncDate: date("last_sync_date"),
+});
+
+export const insertInsuranceProviderSchema = createInsertSchema(insuranceProviders).omit({
+  id: true,
+});
+
+// Patient Insurance schema
+export const patientInsurances = pgTable("patient_insurances", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").notNull(),
+  insuranceProviderId: integer("insurance_provider_id").notNull(),
+  memberNumber: text("member_number").notNull(),
+  policyNumber: text("policy_number"),
+  startDate: date("start_date"),
+  endDate: date("end_date"),
+  coverageType: text("coverage_type"), // 'basic', 'premium', 'comprehensive', etc.
+  coverageLimit: decimal("coverage_limit", { precision: 12, scale: 2 }),
+  status: text("status").notNull().default("active"), // 'active', 'inactive', 'expired'
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertPatientInsuranceSchema = createInsertSchema(patientInsurances).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types export
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -379,3 +418,9 @@ export type InsertBilling = z.infer<typeof insertBillingSchema>;
 
 export type BillingItem = typeof billingItems.$inferSelect;
 export type InsertBillingItem = z.infer<typeof insertBillingItemSchema>;
+
+export type InsuranceProvider = typeof insuranceProviders.$inferSelect;
+export type InsertInsuranceProvider = z.infer<typeof insertInsuranceProviderSchema>;
+
+export type PatientInsurance = typeof patientInsurances.$inferSelect;
+export type InsertPatientInsurance = z.infer<typeof insertPatientInsuranceSchema>;
