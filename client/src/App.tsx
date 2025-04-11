@@ -35,6 +35,7 @@ function Router() {
       <Route path="/medical-records">{() => <MedicalRecordList />}</Route>
       <Route path="/medical-records/new" component={MedicalRecordForm} />
       <Route path="/outpatient" component={OutpatientQueue} />
+      <Route path="/inpatient" component={InpatientManagement} />
       <Route path="/pharmacy/inventory" component={PharmacyInventory} />
       <Route path="/pharmacy/prescriptions" component={PrescriptionList} />
       <Route path="/laboratory/requests" component={LabRequestList} />

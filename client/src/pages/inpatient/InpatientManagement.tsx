@@ -74,46 +74,57 @@ export default function InpatientManagement() {
   // Load active admissions
   const { data: activeAdmissions, isLoading: loadingActive } = useQuery({
     queryKey: ['/api/inpatient/admissions', 'active'],
-    queryFn: () => 
-      apiRequest('/api/inpatient/admissions?active=true', { method: 'GET' }),
+    queryFn: async () => {
+      const response = await apiRequest('/api/inpatient/admissions?active=true');
+      return response as any[];
+    },
     enabled: selectedTab === "active"
   });
 
   // Load available beds
   const { data: availableBeds, isLoading: loadingBeds } = useQuery({
     queryKey: ['/api/beds/available'],
-    queryFn: () => 
-      apiRequest('/api/beds?status=available', { method: 'GET' }),
+    queryFn: async () => {
+      const response = await apiRequest('/api/beds?status=available');
+      return response as any[];
+    }
   });
 
   // Load rooms
   const { data: rooms, isLoading: loadingRooms } = useQuery({
     queryKey: ['/api/rooms'],
-    queryFn: () => 
-      apiRequest('/api/rooms', { method: 'GET' }),
+    queryFn: async () => {
+      const response = await apiRequest('/api/rooms');
+      return response as any[];
+    }
   });
 
   // Load all patients for admission form
   const { data: patients, isLoading: loadingPatients } = useQuery({
     queryKey: ['/api/patients'],
-    queryFn: () => 
-      apiRequest('/api/patients', { method: 'GET' }),
+    queryFn: async () => {
+      const response = await apiRequest('/api/patients');
+      return response as any[];
+    }
   });
 
   // Load doctors
   const { data: doctors, isLoading: loadingDoctors } = useQuery({
     queryKey: ['/api/doctors'],
-    queryFn: () => 
-      apiRequest('/api/doctors', { method: 'GET' }),
+    queryFn: async () => {
+      const response = await apiRequest('/api/doctors');
+      return response as any[];
+    }
   });
 
   // Create admission mutation
   const admissionMutation = useMutation({
-    mutationFn: (newAdmission: any) => 
-      apiRequest('/api/inpatient/admissions', {
+    mutationFn: async (newAdmission: any) => {
+      return await apiRequest('/api/inpatient/admissions', {
         method: 'POST',
         body: JSON.stringify(newAdmission),
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/inpatient/admissions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/beds/available'] });
@@ -135,15 +146,16 @@ export default function InpatientManagement() {
 
   // Discharge patient mutation
   const dischargeMutation = useMutation({
-    mutationFn: (data: any) => 
-      apiRequest(`/api/inpatient/admissions/${data.id}`, {
+    mutationFn: async (data: any) => {
+      return await apiRequest(`/api/inpatient/admissions/${data.id}`, {
         method: 'PUT',
         body: JSON.stringify({
           status: 'discharged',
           dischargeDate: format(new Date(), 'yyyy-MM-dd'),
           dischargeTime: format(new Date(), 'HH:mm:ss')
         }),
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/inpatient/admissions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/beds/available'] });

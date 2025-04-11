@@ -24,6 +24,7 @@ export default function Sidebar() {
     { name: "Jadwal & Appointment", href: "/appointments", icon: Calendar },
     { name: "Rekam Medis", href: "/medical-records", icon: FileText },
     { name: "Rawat Jalan", href: "/outpatient", icon: Activity },
+    { name: "Rawat Inap", href: "/inpatient", icon: Activity },
     { name: "Farmasi", href: "/pharmacy/inventory", icon: Package },
     { name: "Laboratorium", href: "/laboratory/requests", icon: FlaskRound },
     { name: "Radiologi", href: "/radiology", icon: Zap },
