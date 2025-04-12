@@ -6,6 +6,9 @@
 ![alt text](3.png)
 ![alt text](4.png)
 
+![alt text](5.png)
+
+![alt text](6.png)
 ## Tentang SIMRS
 
 SIMRS (Sistem Informasi Manajemen Rumah Sakit) adalah aplikasi komprehensif untuk mengelola operasional rumah sakit dengan integrasi Satu Sehat. Sistem ini dirancang untuk membantu rumah sakit di Indonesia dalam mendigitalisasi dan mengoptimalkan proses operasional mereka, mulai dari pendaftaran pasien hingga rekam medis elektronik.
